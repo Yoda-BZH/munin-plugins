@@ -35,7 +35,6 @@ do
     esac
 done
 
-
 ########################
 ## uptime
 ########################
@@ -225,6 +224,7 @@ function config_debitethernet {
     echo 'graph_title Debit Ethernet'
     echo "debitethernetup.label Up"
     echo "debitethernetdown.label Down"
+}
 
 function run_debitethernet {
     line=$(grep "Ethernet" $tmpfile)
@@ -286,7 +286,6 @@ function run_debitswitch {
     echo "debitswitchup.value $up"
     echo "debitswitchdown.value $down"
 }
-
 
 
 
