@@ -8,6 +8,8 @@ my $host = $0;
 $host =~ s/.*ping_(\S+)$/$1/;
 
 if (@ARGV && $ARGV[0] eq 'config') {
+	my $name = $host;
+	$name =~ tr/./_/;
 	print <<CONFIG;
 graph_title Ping response time $host
 graph_vlabel time (ms)
@@ -17,8 +19,6 @@ graph_category network-latency
 $name.label Ping for $host
 CONFIG
 
-	my $name = $host;
-	$name =~ tr/./_/;
 	print "$name.label $host\n";
 }
 
