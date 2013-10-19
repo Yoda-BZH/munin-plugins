@@ -1,8 +1,12 @@
 Usage :
 
 Place the script somewhere, /usr/local/share/munin/plugins for example.
+
 Then :
+
+```bash
 ln -s /usr/local/share/munin/plugins/ping2_ /etc/munin/plugins/ping2_www.github.com
+```
 
 Restart munin-node
 
