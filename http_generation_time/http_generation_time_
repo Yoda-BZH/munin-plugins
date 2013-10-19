@@ -1,0 +1,24 @@
+#!/bin/bash
+
+site=$(echo $0 | cut -d"_" -f 4-)
+
+case $1 in
+	config)
+		echo "
+graph_category http
+graph_title HTTP Generation time for $site
+graph_vlabel Time (in seconds)
+generationtime.critical 1.5
+generationtime.label Time"
+		exit 0
+		;;
+	*)
+		;;
+esac
+
+#site=www.materiel.net
+generationtime=$(/usr/bin/time -f %e curl -s -o /dev/null http://$site 2>&1)
+
+echo "generationtime.value $generationtime"
+
+exit 0

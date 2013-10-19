@@ -1,0 +1,26 @@
+#!/bin/bash
+
+site=$(echo $0 | cut -d"_" -f 3-)
+
+case $1 in
+	config)
+		echo "
+graph_args --base 1000 --lower-limit 0 --upper-limit 550
+graph_scale no
+graph_category http
+graph_title HTTP Status Code for $site
+graph_vlabel HTTP Code
+httpstatus.critical 500
+httpstatus.label Status"
+		exit 0
+		;;
+	*)
+		;;
+esac
+
+#site=www.materiel.net
+httpstatus=$(curl -s -I $site | head -n 1 | cut -d' ' -f 2)
+
+echo "httpstatus.value $httpstatus"
+
+exit 0

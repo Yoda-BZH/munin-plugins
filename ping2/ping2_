@@ -1,0 +1,57 @@
+#!/usr/bin/perl -w
+# usage: Link this script as ping_[ipaddr]
+
+use strict;
+
+my $host = $0;
+#$host =~ s/.*ping2_([\d\.]{8,15})$/$1/;
+$host =~ s/.*ping2_(\S+)$/$1/;
+
+if (@ARGV && $ARGV[0] eq 'config') {
+my $hname = `host -W1 $host | head -n 1`;
+
+if($hname =~ /not found/){
+	$hname = $host; }
+	$hname =~ s/^.*\s(\S+)$/$1/;
+chomp $hname;
+print <<CONFIG;
+graph_title Ping $host ($hname)
+graph_vlabel time (ms)
+graph_args --base 1000 -l 0
+graph_scale no
+graph_category network-latency
+CONFIG
+
+	my $name = $host;
+	$name =~ tr/./_/;
+	print "ping.label $host\n";
+	print "packetloss.label packet loss\n";
+	print "packetloss.graph no\n";
+}
+
+else {
+	@ENV{qw(PATH)} = qw(/bin);
+
+	my $name = $host;
+	$name =~ tr/./_/;
+	my @ping = qx(/bin/ping -i 0.3 -nc5 $host 2>/dev/null);
+	my $times = $ping[-1];
+	#my $times = `/bin/grep rtt /tmp/$host`;
+	chomp $times;
+	my $val = '';
+	# second term is avg
+	if ($times =~ m{^rtt min/avg/max/mdev = [\d\.]+\/([\d\.]+)}) {
+		$val = $1;
+	} else {
+		$val = 1000;
+	}
+	print "ping.value $val\n";
+
+	#$times = `/bin/grep packets /tmp/$host`;
+	$val = 0;
+	if( $times =~ m{^\d+ packets transmitted, \d+ received, (\d+)% packet loss.*}) {
+		$val = $1;
+	}
+	print "packetloss.value $val\n";
+}
+
