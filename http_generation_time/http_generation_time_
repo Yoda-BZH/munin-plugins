@@ -16,7 +16,6 @@ generationtime.label Time"
 		;;
 esac
 
-#site=www.materiel.net
 generationtime=$(/usr/bin/time -f %e curl -s -o /dev/null http://$site 2>&1)
 
 echo "generationtime.value $generationtime"
